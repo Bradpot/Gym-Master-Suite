@@ -1,0 +1,96 @@
+Build a full-stack Gym Management Web Application with a secure Admin Panel, focusing on member lifecycle management, subscription tracking, and automated notifications.
+
+CORE MODULES:
+
+1. Authentication:
+- Secure admin login (session/JWT-based)
+- Protected routes for admin-only access
+
+2. Member Management (CRUD):
+- Create, Read, Update, Delete members
+- Fields:
+  - Full Name
+  - Auto-generated Unique Member ID
+  - Phone Number
+  - Profile Photo (upload & storage)
+  - Membership Start Date
+  - Membership Duration (months)
+- Automatically compute Membership End Date
+- Display members in a paginated, sortable table
+
+3. Search & Filtering:
+- Global search by:
+  - Member ID
+  - Name
+  - Phone Number
+- Filters:
+  - Active Members
+  - Expired Members
+  - Expiring Soon (within 7 days)
+
+4. Subscription Logic:
+- Status classification:
+  - Active
+  - Expiring Soon (≤ 7 days remaining)
+  - Expired
+- Dynamic badge indicators in UI
+
+5. Calendar Integration:
+- Interactive calendar view
+- Highlight membership end dates
+- Date click → list members expiring on that date
+
+6. Notification System:
+- Identify members whose subscriptions expire in 7 days
+- Trigger:
+  - Admin alerts (dashboard notifications)
+  - Automated SMS/WhatsApp messages to members
+- Example message:
+  "Your gym membership expires on [DATE]. Please renew to continue."
+
+7. Automation:
+- Scheduled background job (cron/worker)
+- Runs daily to:
+  - Check upcoming expirations
+  - Send notifications automatically
+
+TECH STACK:
+
+Frontend:
+- HTML, CSS, JavaScript (or React for scalability)
+
+Backend:
+- Flask (Python) or Node.js (Express)
+
+Database:
+- MySQL or MongoDB
+
+Integrations:
+- SMS/WhatsApp API (Twilio / Fast2SMS)
+- File upload system for images
+
+UI/UX REQUIREMENTS:
+
+- Clean, modern, gym-themed interface
+- Fully responsive (mobile + desktop)
+- Dashboard cards:
+  - Total Members
+  - Active
+  - Expiring Soon
+  - Expired
+- Highlight expiring members (color-coded)
+- Table with sorting, pagination, and actions
+
+OPTIONAL FEATURES:
+
+- Export member data to CSV
+- Membership renewal workflow
+- Basic payment tracking system
+- Dark mode toggle
+
+EXPECTED OUTPUT:
+
+- Fully functional Gym Management System
+- Admin dashboard with complete CRUD
+- Working calendar + notification system
+- Automated expiry alerts (7 days prior)
