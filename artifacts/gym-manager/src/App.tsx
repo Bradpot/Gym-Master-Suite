@@ -32,7 +32,7 @@ function Router() {
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <ThemeProvider defaultTheme="dark" storageKey="irontrack-theme">
+      <ThemeProvider defaultTheme="dark" storageKey="fitnestemple-theme">
         <TooltipProvider>
           <WouterRouter base={import.meta.env.BASE_URL.replace(/\/$/, "")}>
             <Layout>

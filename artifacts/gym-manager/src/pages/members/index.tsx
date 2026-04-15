@@ -93,7 +93,7 @@ export default function Members() {
         const url = window.URL.createObjectURL(blob);
         const a = document.createElement("a");
         a.href = url;
-        a.download = `irontrack-members-${format(new Date(), "yyyy-MM-dd")}.csv`;
+        a.download = `fitness-temple-members-${format(new Date(), "yyyy-MM-dd")}.csv`;
         a.click();
         window.URL.revokeObjectURL(url);
         toast({ title: "Export downloaded" });
