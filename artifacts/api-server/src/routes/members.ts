@@ -27,6 +27,26 @@ const storage = multer.diskStorage({
 });
 
 const upload = multer({ storage, limits: { fileSize: 5 * 1024 * 1024 } });
+const csvUpload = multer({ storage: multer.memoryStorage(), limits: { fileSize: 10 * 1024 * 1024 } });
+
+function parseCSVRow(line: string): string[] {
+  const result: string[] = [];
+  let current = "";
+  let inQuotes = false;
+  for (let i = 0; i < line.length; i++) {
+    const ch = line[i];
+    if (ch === '"') {
+      inQuotes = !inQuotes;
+    } else if (ch === "," && !inQuotes) {
+      result.push(current.trim());
+      current = "";
+    } else {
+      current += ch;
+    }
+  }
+  result.push(current.trim());
+  return result;
+}
 
 const router: IRouter = Router();
 
@@ -136,6 +156,71 @@ router.get("/members/export/csv", async (_req, res): Promise<void> => {
   res.setHeader("Content-Type", "text/csv");
   res.setHeader("Content-Disposition", `attachment; filename="members-${format(new Date(), "yyyy-MM-dd")}.csv"`);
   res.send(csv);
+});
+
+router.post("/members/import-csv", csvUpload.single("csv"), async (req, res): Promise<void> => {
+  if (!req.file) {
+    res.status(400).json({ error: "No CSV file provided" });
+    return;
+  }
+
+  const text = req.file.buffer.toString("utf-8");
+  const lines = text.split(/\r?\n/).filter((l) => l.trim() !== "");
+
+  if (lines.length < 2) {
+    res.status(400).json({ error: "CSV file is empty or has only a header row" });
+    return;
+  }
+
+  const headerLine = lines[0].toLowerCase();
+  const hasHeader = headerLine.includes("name") || headerLine.includes("phone") || headerLine.includes("full") || headerLine.includes("member");
+  const dataLines = hasHeader ? lines.slice(1) : lines;
+
+  let totalCount = Number((await db.select({ count: sql<number>`count(*)` }).from(membersTable))[0].count);
+
+  let importedCount = 0;
+  const errors: string[] = [];
+
+  for (let i = 0; i < dataLines.length; i++) {
+    const line = dataLines[i].trim();
+    if (!line) continue;
+
+    const rowNum = i + (hasHeader ? 2 : 1);
+    const fields = parseCSVRow(line);
+
+    let fullName: string, phoneNumber: string, startDate: string, duration: number;
+
+    if (fields.length >= 6 && /^GYM-\d+/.test(fields[0])) {
+      fullName = fields[1].replace(/^"|"$/g, "").trim();
+      phoneNumber = fields[2].trim();
+      startDate = fields[3].trim();
+      duration = parseInt(fields[5].trim(), 10);
+    } else if (fields.length >= 4) {
+      fullName = fields[0].replace(/^"|"$/g, "").trim();
+      phoneNumber = fields[1].trim();
+      startDate = fields[2].trim();
+      duration = parseInt(fields[3].trim(), 10);
+    } else {
+      errors.push(`Row ${rowNum}: expected at least 4 columns (Full Name, Phone, Start Date YYYY-MM-DD, Duration months)`);
+      continue;
+    }
+
+    if (!fullName || fullName.length < 2) { errors.push(`Row ${rowNum}: invalid name "${fullName}"`); continue; }
+    if (!phoneNumber || phoneNumber.length < 5) { errors.push(`Row ${rowNum}: invalid phone "${phoneNumber}"`); continue; }
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(startDate)) { errors.push(`Row ${rowNum}: invalid date "${startDate}" — use YYYY-MM-DD`); continue; }
+    if (isNaN(duration) || duration < 1) { errors.push(`Row ${rowNum}: invalid duration "${duration}"`); continue; }
+
+    try {
+      const memberId = generateMemberId(totalCount);
+      await db.insert(membersTable).values({ memberId, fullName, phoneNumber, profilePhotoUrl: null, membershipStartDate: startDate, membershipDurationMonths: duration });
+      totalCount++;
+      importedCount++;
+    } catch (e) {
+      errors.push(`Row ${rowNum}: insert failed — ${(e as Error).message}`);
+    }
+  }
+
+  res.json({ imported: importedCount, skipped: errors.length, errors, total: dataLines.filter(l => l.trim()).length });
 });
 
 router.get("/members/calendar/:year/:month", async (req, res): Promise<void> => {

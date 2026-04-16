@@ -10,8 +10,9 @@ import type { ListMembersStatus, Member } from "@workspace/api-client-react";
 import { useQueryClient } from "@tanstack/react-query";
 import { format } from "date-fns";
 import {
-  Search, Plus, MoreHorizontal, Edit, Trash2, Download, UserRound, ChevronLeft, ChevronRight,
+  Search, Plus, MoreHorizontal, Edit, Trash2, Download, Upload, UserRound, ChevronLeft, ChevronRight,
 } from "lucide-react";
+import { CsvImportDialog } from "@/components/csv-import-dialog";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -51,6 +52,7 @@ export default function Members() {
   const [status, setStatus] = useState<ListMembersStatus>("all");
   const [page, setPage] = useState(1);
   const [memberToDelete, setMemberToDelete] = useState<Member | null>(null);
+  const [importOpen, setImportOpen] = useState(false);
 
   // Proper debounce
   useEffect(() => {
@@ -114,6 +116,10 @@ export default function Members() {
           <p className="text-muted-foreground mt-1">Manage memberships and member records.</p>
         </div>
         <div className="flex gap-2 flex-wrap">
+          <Button variant="outline" onClick={() => setImportOpen(true)} size="sm">
+            <Upload className="mr-2 h-4 w-4" />
+            Import CSV
+          </Button>
           <Button variant="outline" onClick={handleExport} disabled={isExporting} size="sm">
             <Download className="mr-2 h-4 w-4" />
             {isExporting ? "Exporting..." : "Export CSV"}
@@ -308,6 +314,14 @@ export default function Members() {
           </div>
         </div>
       )}
+
+      <CsvImportDialog
+        open={importOpen}
+        onOpenChange={setImportOpen}
+        onImportComplete={() => {
+          queryClient.invalidateQueries({ queryKey: getListMembersQueryKey() });
+        }}
+      />
 
       {/* Delete Confirmation */}
       <AlertDialog open={!!memberToDelete} onOpenChange={(open) => !open && setMemberToDelete(null)}>
