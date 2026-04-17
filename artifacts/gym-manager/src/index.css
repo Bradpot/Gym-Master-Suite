@@ -226,6 +226,79 @@
   ::-webkit-scrollbar-thumb:hover { background: hsl(var(--muted-foreground) / 0.4); }
 }
 
+/* ── Gym-energy keyframes ─────────────────────────────────────── */
+
+/* EKG/heartbeat scroll */
+@keyframes ekg-scroll {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+/* Cardiac heartbeat rhythm: lub-dub */
+@keyframes heartbeat-pulse {
+  0%   { transform: scale(1); }
+  14%  { transform: scale(1.22); }
+  28%  { transform: scale(1); }
+  42%  { transform: scale(1.12); }
+  60%  { transform: scale(1); }
+  100% { transform: scale(1); }
+}
+
+/* Dumbbell lift — lifts up and drops */
+@keyframes dumbbell-lift {
+  0%   { transform: translateY(0)   rotate(0deg); }
+  30%  { transform: translateY(-6px) rotate(-8deg); }
+  50%  { transform: translateY(-8px) rotate(-10deg); }
+  70%  { transform: translateY(-4px) rotate(-5deg); }
+  100% { transform: translateY(0)   rotate(0deg); }
+}
+
+/* Lightning flash */
+@keyframes zap-flash {
+  0%, 100%   { opacity: 1;   transform: scale(1); }
+  20%        { opacity: 0.4; transform: scale(0.9); }
+  40%        { opacity: 1;   transform: scale(1.15); }
+  60%        { opacity: 0.6; transform: scale(1); }
+  80%        { opacity: 1;   transform: scale(1.05); }
+}
+
+/* Clock tick */
+@keyframes clock-tick {
+  0%   { transform: rotate(0deg); }
+  25%  { transform: rotate(6deg); }
+  75%  { transform: rotate(-6deg); }
+  100% { transform: rotate(0deg); }
+}
+
+/* Power surge — left-to-right highlight sweep */
+@keyframes power-surge {
+  0%   { background-position: -200% center; }
+  100% { background-position:  200% center; }
+}
+
+/* Fire flicker for the logo */
+@keyframes fire-flicker {
+  0%, 100% { transform: scale(1)    rotate(0deg);   filter: brightness(1); }
+  25%       { transform: scale(1.07) rotate(-3deg);  filter: brightness(1.2); }
+  50%       { transform: scale(0.95) rotate(2deg);   filter: brightness(0.9); }
+  75%       { transform: scale(1.05) rotate(-2deg);  filter: brightness(1.15); }
+}
+
+/* Ripple ring for the active badge */
+@keyframes ripple-ring {
+  0%   { box-shadow: 0 0 0 0 hsl(var(--primary) / 0.6); }
+  70%  { box-shadow: 0 0 0 10px hsl(var(--primary) / 0); }
+  100% { box-shadow: 0 0 0 0   hsl(var(--primary) / 0); }
+}
+
+/* Muscle flex — punchy bounce for icon containers */
+@keyframes muscle-flex {
+  0%   { transform: scale(1); }
+  40%  { transform: scale(1.18); }
+  70%  { transform: scale(0.95); }
+  100% { transform: scale(1); }
+}
+
 /* ── Keyframes ────────────────────────────────────────────────── */
 @keyframes fade-in-up {
   from { opacity: 0; transform: translateY(18px); }
@@ -267,6 +340,29 @@
 @keyframes border-spin {
   from { --angle: 0deg; }
   to   { --angle: 360deg; }
+}
+
+/* ── Gym animation utilities ──────────────────────────────────── */
+.animate-heartbeat-pulse { animation: heartbeat-pulse 1.4s ease-in-out infinite; }
+.animate-dumbbell-lift   { animation: dumbbell-lift   2.2s ease-in-out infinite; }
+.animate-zap-flash       { animation: zap-flash       1.8s ease-in-out infinite; }
+.animate-clock-tick      { animation: clock-tick      1s   ease-in-out infinite; }
+.animate-fire-flicker    { animation: fire-flicker    2.5s ease-in-out infinite; }
+.animate-ripple-ring     { animation: ripple-ring     1.8s ease-out     infinite; }
+.animate-muscle-flex     { animation: muscle-flex     2.8s ease-in-out infinite; }
+
+/* Power surge text/bg */
+.text-power-surge {
+  background: linear-gradient(90deg,
+    hsl(var(--primary)) 0%,
+    hsl(280 80% 72%) 40%,
+    hsl(var(--primary)) 80%
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: power-surge 2.5s linear infinite;
 }
 
 /* ── Animation utilities ──────────────────────────────────────── */
