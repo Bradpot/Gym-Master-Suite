@@ -49,19 +49,20 @@ export function Layout({ children }: LayoutProps) {
   return (
     <div className="flex min-h-[100dvh] bg-background">
       {/* Sidebar */}
-      <aside className="w-[220px] border-r border-sidebar-border bg-sidebar flex-shrink-0 flex flex-col">
+      <aside className="w-[220px] border-r border-sidebar-border bg-sidebar flex-shrink-0 flex flex-col animate-slide-in-left">
         {/* Logo */}
         <div className="h-16 flex items-center px-5 border-b border-sidebar-border">
           <Link href="/dashboard" className="flex items-center gap-2.5 group">
-            <div className="h-8 w-8 rounded-xl bg-primary flex items-center justify-center shadow-sm shadow-primary/30 transition-transform group-hover:scale-105">
+            <div className="h-8 w-8 rounded-xl bg-primary flex items-center justify-center animate-float-bob animate-glow-pulse">
               <Flame className="h-4 w-4 text-white" strokeWidth={2.5} />
             </div>
             <span
-              className="font-display font-bold text-[15px] leading-tight text-sidebar-foreground tracking-tight"
+              className="font-bold text-[15px] leading-tight tracking-tight"
               style={{ fontFamily: "var(--app-font-display)" }}
             >
-              Fitness<br />
-              <span className="text-primary">Temple</span>
+              <span className="text-sidebar-foreground">Fitness</span>
+              <br />
+              <span className="text-shimmer">Temple</span>
             </span>
           </Link>
         </div>
@@ -74,7 +75,7 @@ export function Layout({ children }: LayoutProps) {
         </div>
 
         {/* Nav items */}
-        <nav className="flex-1 px-3 pb-4 space-y-0.5">
+        <nav className="flex-1 px-3 pb-4 space-y-0.5 stagger">
           {navItems.map((item) => {
             const active = isActive(item.href);
             return (
@@ -82,15 +83,18 @@ export function Layout({ children }: LayoutProps) {
                 key={item.href}
                 href={item.href}
                 className={cn(
-                  "flex items-center justify-between px-3 py-2.5 rounded-xl text-sm transition-all duration-150 font-medium",
+                  "nav-pill animate-slide-in-left flex items-center justify-between px-3 py-2.5 rounded-xl text-sm font-medium",
                   active
-                    ? "bg-primary text-primary-foreground shadow-sm shadow-primary/25"
+                    ? "active bg-primary text-primary-foreground shadow-lg shadow-primary/30"
                     : "text-sidebar-foreground/80 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
                 )}
               >
                 <span className="flex items-center gap-3">
                   <item.icon
-                    className={cn("h-4 w-4 flex-shrink-0", active ? "opacity-100" : "opacity-70")}
+                    className={cn(
+                      "h-4 w-4 flex-shrink-0 transition-transform duration-200",
+                      active ? "opacity-100 scale-110" : "opacity-60 group-hover:scale-110"
+                    )}
                     strokeWidth={active ? 2.5 : 2}
                   />
                   {item.label}
@@ -98,11 +102,11 @@ export function Layout({ children }: LayoutProps) {
                 {item.badge !== null && item.badge !== undefined && item.badge > 0 && (
                   <span
                     className={cn(
-                      "text-[10px] font-bold px-1.5 py-0.5 rounded-full min-w-[18px] text-center leading-none",
+                      "text-[10px] font-bold px-1.5 py-0.5 rounded-full min-w-[18px] text-center leading-none transition-all duration-300",
                       active
                         ? "bg-white/25 text-white"
                         : item.badgeUrgent
-                        ? "bg-amber-500 text-white"
+                        ? "bg-amber-500 text-white animate-pulse"
                         : "bg-muted text-muted-foreground"
                     )}
                   >
@@ -115,7 +119,7 @@ export function Layout({ children }: LayoutProps) {
         </nav>
 
         {/* Footer status */}
-        <div className="p-3 border-t border-sidebar-border">
+        <div className="p-3 border-t border-sidebar-border animate-fade-in" style={{ animationDelay: "400ms" }}>
           <div className="flex items-center gap-2.5 px-3 py-2.5 rounded-xl bg-muted/30">
             <span className="relative flex h-2 w-2">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75" />
@@ -129,16 +133,16 @@ export function Layout({ children }: LayoutProps) {
       {/* Main */}
       <main className="flex-1 flex flex-col min-w-0 overflow-hidden">
         {/* Topbar */}
-        <header className="h-16 border-b border-border bg-card/60 backdrop-blur-md flex items-center justify-between px-6 flex-shrink-0 sticky top-0 z-10">
+        <header className="h-16 border-b border-border bg-card/60 backdrop-blur-md flex items-center justify-between px-6 flex-shrink-0 sticky top-0 z-10 animate-fade-in">
           <div className="flex items-center gap-2">
-            <span className="text-sm font-semibold text-foreground/80 hidden sm:block">
+            <span className="text-sm font-semibold text-foreground/80 hidden sm:block transition-all duration-300">
               {activeLabel ?? "Fitness Temple"}
             </span>
           </div>
           <div className="flex items-center gap-3">
             {stats?.expiringSoonMembers ? (
-              <div className="hidden sm:flex items-center gap-2 text-xs font-medium text-amber-600 dark:text-amber-400 bg-amber-500/10 border border-amber-500/20 rounded-full px-3 py-1.5">
-                <span className="w-1.5 h-1.5 rounded-full bg-amber-500 flex-shrink-0" />
+              <div className="hidden sm:flex items-center gap-2 text-xs font-medium text-amber-600 dark:text-amber-400 bg-amber-500/10 border border-amber-500/20 rounded-full px-3 py-1.5 animate-scale-in">
+                <span className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse flex-shrink-0" />
                 {stats.expiringSoonMembers} expiring soon
               </div>
             ) : null}
@@ -146,9 +150,11 @@ export function Layout({ children }: LayoutProps) {
               variant="ghost"
               size="icon"
               onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-              className="h-9 w-9 rounded-xl"
+              className="h-9 w-9 rounded-xl transition-all duration-200 hover:rotate-12 hover:scale-110"
             >
-              {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+              {theme === "dark"
+                ? <Sun className="h-4 w-4 transition-transform duration-300" />
+                : <Moon className="h-4 w-4 transition-transform duration-300" />}
               <span className="sr-only">Toggle theme</span>
             </Button>
           </div>
@@ -156,7 +162,9 @@ export function Layout({ children }: LayoutProps) {
 
         {/* Page content */}
         <div className="flex-1 overflow-auto p-6">
-          {children}
+          <div key={location} className="animate-fade-in-up h-full">
+            {children}
+          </div>
         </div>
       </main>
     </div>

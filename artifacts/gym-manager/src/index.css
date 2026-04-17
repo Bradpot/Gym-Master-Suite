@@ -219,4 +219,123 @@
   h1, h2, h3 {
     font-family: var(--app-font-display);
   }
+
+  ::-webkit-scrollbar { width: 5px; height: 5px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: hsl(var(--border)); border-radius: 99px; }
+  ::-webkit-scrollbar-thumb:hover { background: hsl(var(--muted-foreground) / 0.4); }
 }
+
+/* ── Keyframes ────────────────────────────────────────────────── */
+@keyframes fade-in-up {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@keyframes scale-in {
+  from { opacity: 0; transform: scale(0.93); }
+  to   { opacity: 1; transform: scale(1); }
+}
+@keyframes slide-in-left {
+  from { opacity: 0; transform: translateX(-14px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+@keyframes float-bob {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  50%       { transform: translateY(-5px) rotate(3deg); }
+}
+@keyframes shimmer-sweep {
+  0%   { background-position: -300% center; }
+  100% { background-position:  300% center; }
+}
+@keyframes number-pop {
+  0%   { opacity: 0; transform: translateY(6px) scale(0.88); }
+  60%  { transform: translateY(-2px) scale(1.04); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+@keyframes bar-grow {
+  from { transform: scaleX(0); }
+  to   { transform: scaleX(1); }
+}
+@keyframes glow-pulse {
+  0%, 100% { box-shadow: 0 0 0 0   hsl(var(--primary) / 0.5); }
+  50%       { box-shadow: 0 0 18px 4px hsl(var(--primary) / 0); }
+}
+@keyframes border-spin {
+  from { --angle: 0deg; }
+  to   { --angle: 360deg; }
+}
+
+/* ── Animation utilities ──────────────────────────────────────── */
+.animate-fade-in-up  { animation: fade-in-up  0.5s cubic-bezier(0.22,1,0.36,1) both; }
+.animate-fade-in     { animation: fade-in     0.4s ease both; }
+.animate-scale-in    { animation: scale-in    0.35s cubic-bezier(0.22,1,0.36,1) both; }
+.animate-slide-in-left { animation: slide-in-left 0.4s cubic-bezier(0.22,1,0.36,1) both; }
+.animate-float-bob   { animation: float-bob   3.5s ease-in-out infinite; }
+.animate-number-pop  { animation: number-pop  0.55s cubic-bezier(0.22,1,0.36,1) both; }
+.animate-glow-pulse  { animation: glow-pulse  2.5s ease-in-out infinite; }
+
+/* Staggered children helpers */
+.stagger > *:nth-child(1) { animation-delay: 0ms; }
+.stagger > *:nth-child(2) { animation-delay: 60ms; }
+.stagger > *:nth-child(3) { animation-delay: 120ms; }
+.stagger > *:nth-child(4) { animation-delay: 180ms; }
+.stagger > *:nth-child(5) { animation-delay: 240ms; }
+.stagger > *:nth-child(6) { animation-delay: 300ms; }
+.stagger > *:nth-child(7) { animation-delay: 360ms; }
+.stagger > *:nth-child(8) { animation-delay: 420ms; }
+
+/* Shimmer text gradient */
+.text-shimmer {
+  background: linear-gradient(
+    90deg,
+    hsl(var(--primary)) 0%,
+    hsl(280 80% 70%) 40%,
+    hsl(var(--primary)) 80%
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: shimmer-sweep 3s linear infinite;
+}
+
+/* Card hover lift */
+.card-hover {
+  transition: transform 0.2s cubic-bezier(0.22,1,0.36,1),
+              box-shadow 0.2s cubic-bezier(0.22,1,0.36,1),
+              border-color 0.2s ease;
+}
+.card-hover:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 32px -8px hsl(var(--primary) / 0.15);
+  border-color: hsl(var(--primary) / 0.25);
+}
+
+/* Sidebar nav pill */
+.nav-pill {
+  position: relative;
+  transition: background 0.2s ease, color 0.15s ease, transform 0.15s ease;
+}
+.nav-pill:hover { transform: translateX(3px); }
+.nav-pill.active { transform: translateX(0); }
+
+/* Bar grow animation (applied inline via style) */
+.bar-segment {
+  transform-origin: left;
+  animation: bar-grow 0.9s cubic-bezier(0.22,1,0.36,1) both;
+}
+
+/* Glow on primary button */
+.btn-glow {
+  transition: box-shadow 0.25s ease, transform 0.15s ease;
+}
+.btn-glow:hover {
+  box-shadow: 0 0 0 4px hsl(var(--primary) / 0.25),
+              0 4px 14px -4px hsl(var(--primary) / 0.5);
+  transform: translateY(-1px);
+}
+.btn-glow:active { transform: translateY(0); }

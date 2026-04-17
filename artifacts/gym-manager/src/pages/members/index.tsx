@@ -110,21 +110,21 @@ export default function Members() {
   return (
     <div className="space-y-5 max-w-7xl mx-auto">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 animate-fade-in-up">
         <div>
           <h1 className="text-3xl font-bold tracking-tight">Members</h1>
           <p className="text-muted-foreground mt-1">Manage memberships and member records.</p>
         </div>
         <div className="flex gap-2 flex-wrap">
-          <Button variant="outline" onClick={() => setImportOpen(true)} size="sm">
+          <Button variant="outline" onClick={() => setImportOpen(true)} size="sm" className="transition-all duration-200 hover:border-primary/40 hover:bg-primary/5">
             <Upload className="mr-2 h-4 w-4" />
             Import CSV
           </Button>
-          <Button variant="outline" onClick={handleExport} disabled={isExporting} size="sm">
+          <Button variant="outline" onClick={handleExport} disabled={isExporting} size="sm" className="transition-all duration-200 hover:border-primary/40 hover:bg-primary/5">
             <Download className="mr-2 h-4 w-4" />
             {isExporting ? "Exporting..." : "Export CSV"}
           </Button>
-          <Button asChild size="sm">
+          <Button asChild size="sm" className="btn-glow">
             <Link href="/members/new">
               <Plus className="mr-2 h-4 w-4" />
               New Member
@@ -134,7 +134,7 @@ export default function Members() {
       </div>
 
       {/* Filters */}
-      <div className="flex flex-col sm:flex-row gap-3 items-stretch sm:items-center">
+      <div className="flex flex-col sm:flex-row gap-3 items-stretch sm:items-center animate-fade-in-up" style={{ animationDelay: "60ms" }}>
         <div className="relative flex-1">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
           <Input
@@ -165,7 +165,7 @@ export default function Members() {
       </div>
 
       {/* Table */}
-      <div className="rounded-xl border bg-card overflow-hidden shadow-sm">
+      <div className="rounded-xl border bg-card overflow-hidden shadow-sm animate-fade-in-up" style={{ animationDelay: "120ms" }}>
         <Table>
           <TableHeader>
             <TableRow className="bg-muted/40 hover:bg-muted/40">
@@ -190,8 +190,12 @@ export default function Members() {
                 </TableRow>
               ))
             ) : data && data.members.length > 0 ? (
-              data.members.map((member) => (
-                <TableRow key={member.id} className="group">
+              data.members.map((member, idx) => (
+                <TableRow
+                  key={member.id}
+                  className="group animate-fade-in-up transition-colors duration-150"
+                  style={{ animationDelay: `${idx * 45}ms` }}
+                >
                   <TableCell className="pr-0">
                     <Avatar className="h-9 w-9 border">
                       <AvatarImage src={member.profilePhotoUrl ?? undefined} alt={member.fullName} />
