@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1366" height="768" viewBox="0 0 1366 768">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0e2436" />
+      <stop offset="100%" stop-color="#123f5b" />
+    </linearGradient>
+  </defs>
+  <rect width="1366" height="768" fill="url(#bg)"/>
+  <rect x="80" y="80" width="1206" height="608" rx="20" fill="#ffffff" opacity="0.92"/>
+  <rect x="120" y="130" width="280" height="518" rx="12" fill="#e9f1f6"/>
+  <rect x="430" y="130" width="816" height="70" rx="10" fill="#d7e8f2"/>
+  <rect x="430" y="220" width="390" height="180" rx="10" fill="#ebf4fa"/>
+  <rect x="856" y="220" width="390" height="180" rx="10" fill="#ebf4fa"/>
+  <rect x="430" y="420" width="816" height="228" rx="10" fill="#f2f8fc"/>
+  <text x="683" y="360" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="44" fill="#19384d">Edit Member Form Screenshot Placeholder</text>
+  <text x="683" y="415" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="24" fill="#2e556e">Replace with real application screenshot</text>
+</svg>
